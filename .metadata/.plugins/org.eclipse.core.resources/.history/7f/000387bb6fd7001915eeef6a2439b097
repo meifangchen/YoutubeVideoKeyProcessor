@@ -1,0 +1,27 @@
+package com.moodeo.moodeo.api;
+
+import java.awt.List;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args ) throws IOException
+    {
+    	List<String> result = new ArrayList<String>();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode youtubeKeys = mapper.readTree(App.class.getClassLoader().getResourceAsStream("youtube.json"));
+        for(JsonNode youtubeKey: youtubeKeys) {
+        	String key = youtubeKey.get("id").get("videoId").asText();
+        	
+        }
+    }
+}
+
