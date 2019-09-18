@@ -23,15 +23,28 @@ public class FetchDataAuto
 {
 	static ArrayList<String> result = new ArrayList<String>();
 	static Set<String> resultSet = new HashSet<String>();
-	
-    public static void main( String[] args ) throws IOException
+	static int counter = 0;
+	static String[] moodKeyWords = {"laugh","funny","interesting"};
+    static int apiKeyIndex = 0;
+	public static void main( String[] args ) throws IOException
     {
-    	String originalURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=funny&type=video&key=AIzaSyBVttFGSKqbKtClSCkaUuyZqPYrQY1hQzE";
-    	String recursiveToken = recursivelyFetchData(originalURL);
-    	while(recursiveToken.length() > 0) {
-    		String nextToken = recursiveToken;
-    		String url = originalURL + "&pageToken=" + nextToken;
-    		recursiveToken = recursivelyFetchData(url);
+    	String originalURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&type=video&key=AIzaSyD4tGsV8uE5piCoUHhOlAnhmoPm8exCRF4&q=";
+    	String initialURL = originalURL+moodKeyWords[apiKeyIndex];
+    	String recursiveToken = recursivelyFetchData(initialURL);
+    	while(recursiveToken.length() > 0 && apiKeyIndex < moodKeyWords.length ) {
+    		if(counter > 5) {
+    			counter = 0; 			
+    			String url = originalURL + moodKeyWords[apiKeyIndex];
+    			apiKeyIndex++;
+        		recursiveToken = recursivelyFetchData(url);
+        		counter++;
+    		} else {
+    			String nextToken = recursiveToken;
+        		String url = originalURL + moodKeyWords[apiKeyIndex]+ "&pageToken=" + nextToken;
+        		recursiveToken = recursivelyFetchData(url);
+        		counter++;
+    		} 
+    		
     	}
     	for(String s: result) {
     		resultSet.add(s);
